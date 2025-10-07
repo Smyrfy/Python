@@ -1,2 +1,2 @@
 # Python
-*4 ex. with  tkinter*
+*3 tasks with  tkinter*
