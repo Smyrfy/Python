@@ -1,0 +1,58 @@
+import pygame as pg
+import sys
+
+GREEN = (0, 255, 0)
+BLACK = (0, 0, 0)
+BLUE = (1, 232, 210)
+PINK = (255, 0, 100)
+YELLOW = (255, 255, 0)
+PURPLE = (150, 0, 255)
+
+sc = pg.display.set_mode((400, 400))
+
+background = pg.Surface((400, 200))
+xb = 0
+yb = 100
+
+hero = pg.Surface((100, 100))
+hero.fill(PINK)
+x = 0
+y = 50
+
+
+circle_radius = 30
+triangle_size = 60
+
+while True:
+    for i in pg.event.get():
+        if i.type == pg.QUIT:
+            sys.exit()
+        elif i.type == pg.MOUSEBUTTONUP:
+            yb = i.pos[1] - background.get_height() // 2
+
+    if x < background.get_width():
+        x += 2
+    else:
+        x = 0
+
+    sc.fill(BLACK)
+    background.fill(BLUE)
+
+    background.blit(hero, (x, y))
+
+    circle_x = x + 150
+    circle_y = y + 60
+    pg.draw.circle(background, YELLOW, (circle_x, circle_y), circle_radius)
+
+    triangle_x = x + 220
+    triangle_y = y + 70
+    pg.draw.polygon(background, PURPLE, [
+        (triangle_x, triangle_y - triangle_size // 2),
+        (triangle_x - triangle_size // 2, triangle_y + triangle_size // 2),
+        (triangle_x + triangle_size // 2, triangle_y + triangle_size // 2)   
+    ])
+
+    sc.blit(background, (xb, yb))
+
+    pg.display.update()
+    pg.time.delay(30)
