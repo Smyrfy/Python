@@ -1,13 +1,12 @@
-
 todo_list = []
 
 def show_menu():
     print("\nОберіть дію:")
-    print("1. Додати задачу")
-    print("2. Показати задачі")
-    print("3. Видалити задачу")
-    print("4. Відсортувати задачі")
-    print("5. Вийти")
+    print("№1. Додати задачу")
+    print("№2. Показати задачі")
+    print("№3. Видалити задачу")
+    print("№4. Відсортувати задачі")
+    print("№5. Вийти")
 
 def add_task():
     task = input("Введіть назву задачі: ")
@@ -45,16 +44,17 @@ while True:
     show_menu()
     choice = input("Ваш вибір: ")
 
-    if choice == "1":
+    if choice == "№1":
         add_task()
-    elif choice == "2":
+    elif choice == "№2":
         show_tasks()
-    elif choice == "3":
+    elif choice == "№3":
         delete_task()
-    elif choice == "4":
+    elif choice == "№4":
         sort_tasks()
-    elif choice == "5":
+    elif choice == "№3":
         print("До побачення!")
         break
     else:
         print("Невірний вибір, спробуйте ще раз.")
+
