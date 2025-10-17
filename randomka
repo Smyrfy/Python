@@ -2,10 +2,6 @@ import random
 
 try:
     target_sum = int(input("Введіть число, яке потрібно розкласти на суму: "))
-    if target_sum < 2:
-        print("Число повинно бути не менше 2 для розкладу на два додатних доданки.")
-        exit()
-
     num_variants = int(input("Скільки різних варіантів розкладу треба створити: "))
     if num_variants <= 0:
         print("Кількість варіантів повинна бути більшою за нуль.")
@@ -18,14 +14,16 @@ except ValueError:
 print(f"\n--- {num_variants} варіантів розкладу числа {target_sum} ---")
 unique_combinations = set()
 
+min_range = target_sum - 1000
+max_range = target_sum + 1000
+
 while len(unique_combinations) < num_variants:
-    first_addend = random.randint(1, target_sum - 1)
+    first_addend = random.randint(min_range, max_range)
     second_addend = target_sum - first_addend
     combination = tuple(sorted((first_addend, second_addend)))
 
     if combination not in unique_combinations:
         unique_combinations.add(combination)
-
         print(f"Варіант {len(unique_combinations)}: {first_addend} + {second_addend}")
 
 print("----------------=D----------------")
