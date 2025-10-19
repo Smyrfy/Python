@@ -5,6 +5,7 @@ W, H = 800, 500
 sc = pygame.display.set_mode((W, H))
 pygame.display.set_caption("Shapes by buttons")
 
+# Colors
 white = (255, 255, 255)
 black = (0, 0, 0)
 blue = (0, 0, 255)
@@ -16,6 +17,10 @@ gray = (180, 180, 180)
 font = pygame.font.SysFont("arial", 20)
 clock = pygame.time.Clock()
 
+# Center definitions
+CENTER_X = W // 2
+CENTER_Y = H // 2
+SHAPE_SIZE = 150
 
 buttons = [
     {"id": 1, "text": "Rectangle", "rect": pygame.Rect(20, 20, 180, 40)},
@@ -24,7 +29,6 @@ buttons = [
     {"id": 4, "text": "Ellipse", "rect": pygame.Rect(20, 170, 180, 40)},
     {"id": 5, "text": "Polygon", "rect": pygame.Rect(20, 220, 180, 40)},
 ]
-
 
 current_shape = None
 
@@ -39,22 +43,49 @@ def draw_buttons():
 
 def draw_shape(shape_id):
     if shape_id == 1:
-        pygame.draw.rect(sc, blue, (300, 100, 150, 100), 3)
+        rect_width, rect_height = SHAPE_SIZE, SHAPE_SIZE * 0.7
+        rect_x = CENTER_X - rect_width // 2
+        rect_y = CENTER_Y - rect_height // 2
+        pygame.draw.rect(sc, blue, (rect_x, rect_y, rect_width, rect_height), 3)
+
     elif shape_id == 2:
-        pygame.draw.line(sc, green, (300, 80), (550, 200), 5)
+        line_length = SHAPE_SIZE + 50
+        start_pos = (CENTER_X - line_length // 2, CENTER_Y - 50)
+        end_pos = (CENTER_X + line_length // 2, CENTER_Y + 50)
+        pygame.draw.line(sc, green, start_pos, end_pos, 5)
+
     elif shape_id == 3:
-        pygame.draw.circle(sc, red, (450, 250), 60, 3)
+        radius = SHAPE_SIZE // 3
+        pygame.draw.circle(sc, red, (CENTER_X, CENTER_Y), radius, 3)
+
     elif shape_id == 4:
-        pygame.draw.ellipse(sc, yellow, (320, 300, 200, 100), 3)
+        ellipse_width, ellipse_height = SHAPE_SIZE, SHAPE_SIZE // 2
+        ellipse_x = CENTER_X - ellipse_width // 2
+        ellipse_y = CENTER_Y - ellipse_height // 2
+        pygame.draw.ellipse(sc, yellow, (ellipse_x, ellipse_y, ellipse_width, ellipse_height), 3)
+
     elif shape_id == 5:
-        pygame.draw.polygon(sc, blue, [(350, 400), (420, 350), (500, 420), (470, 470), (370, 470)], 3)
+
+        polygon_points_relative = [
+            (0, -SHAPE_SIZE // 3),
+            (SHAPE_SIZE // 4, 0),
+            (SHAPE_SIZE // 6, SHAPE_SIZE // 3),
+            (-SHAPE_SIZE // 6, SHAPE_SIZE // 3),
+            (-SHAPE_SIZE // 4, 0)
+        ]
+
+        final_points = [
+            (px + CENTER_X, py + CENTER_Y)
+            for px, py in polygon_points_relative
+        ]
+
+        pygame.draw.polygon(sc, blue, final_points, 3)
 
 
 running = True
 while running:
     sc.fill(white)
     draw_buttons()
-
 
     if current_shape is not None:
         draw_shape(current_shape)
@@ -68,7 +99,7 @@ while running:
             for btn in buttons:
                 if btn["rect"].collidepoint(mouse):
                     current_shape = btn["id"]
-                    print(f"when button click: {btn['text']}")
+
 
     pygame.display.update()
     clock.tick(60)
