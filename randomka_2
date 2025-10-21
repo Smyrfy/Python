@@ -1,1 +1,70 @@
 
+import sys
+import random
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import Qt
+
+
+class PasswordManager(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.stored_data = {}
+        self.setup_ui()
+
+    def setup_ui(self):
+        self.setWindowTitle('Менеджер паролей')
+        self.setFixedSize(400, 300)
+
+        central = QWidget()
+        self.setCentralWidget(central)
+        layout = QVBoxLayout(central)
+
+        label = QLabel('Введіть логін для генерації пароля:')
+        layout.addWidget(label)
+
+        self.login_input = QLineEdit()
+        layout.addWidget(self.login_input)
+
+        generate_btn = QPushButton('Згенерувати пароль')
+        generate_btn.clicked.connect(self.generate_password)
+        layout.addWidget(generate_btn)
+
+        view_btn = QPushButton('Показати збережені паролі')
+        view_btn.clicked.connect(self.show_passwords)
+        layout.addWidget(view_btn)
+
+        self.result_label = QLabel('')
+        layout.addWidget(self.result_label)
+
+    def generate_password(self):
+        login = self.login_input.text()
+        if not login:
+            return
+
+        letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        digits = '0123456789'
+        all_chars = letters + digits
+
+        password = ''
+        for i in range(10):
+            password += random.choice(all_chars)
+
+        self.stored_data[login] = password
+        self.login_input.clear()
+        self.result_label.setText(f'Для {login} збережено пароль: {password}')
+
+    def show_passwords(self):
+        if not self.stored_data:
+            self.result_label.setText('Немає збережених паролів')
+            return
+
+        text = ''
+        for login, password in self.stored_data.items():
+            text += f'{login}: {password}\n'
+
+        self.result_label.setText(text)
+
+
+app = QApplication(sys.argv)
+window = PasswordManager()
+window.show()
