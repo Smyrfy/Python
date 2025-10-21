@@ -68,3 +68,4 @@ class PasswordManager(QMainWindow):
 app = QApplication(sys.argv)
 window = PasswordManager()
 window.show()
+app.exec_()
