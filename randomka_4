@@ -1,1 +1,56 @@
+import random
 
+def rock_paper_scissors():
+    print(" ГРА 'КАМІНЬ-НОЖИЦІ-ПАПІР' ")
+    print("=" * 35)
+
+    choices = ['✊ Камінь', '✌️ Ножиці', '✋ Папір']
+    wins = {
+        '✊ Камінь': '✌️ Ножиці',
+        '✌️ Ножиці': '✋ Папір',
+        '✋ Папір': '✊ Камінь'
+    }
+
+    user_score = 0
+    computer_score = 0
+
+    while True:
+        print(f"\n ТВІЙ РАХУНОК: {user_score} | РАХУНОК КОМП'ЮТЕРА: {computer_score}")
+        print("\1. ✊ Камінь\n2. ✌️ Ножиці\n3. ✋ Папір\n0. Вийти")
+
+        user_input = input("\nТвій вибір (0-3): ")
+
+        if user_input == '0':
+            break
+
+        if user_input not in ['1', '2', '3']:
+            print("Введи 1, 2, 3 або 0!")
+            continue
+
+        user_index = int(user_input) - 1
+        user_choice = choices[user_index]
+        computer_choice = random.choice(choices)
+
+        print(f"\n Ти: {user_choice}")
+        print(f" Комп'ютер: {computer_choice}")
+
+        if user_choice == computer_choice:
+            print(" Нічия!")
+        elif wins[user_choice] == computer_choice:
+            print(" ТИ ВИГРАВ(ЛА)!")
+            user_score += 1
+        else:
+            print(" КОМП'ЮТЕР ВИГРАВ!")
+            computer_score += 1
+
+    print(f"\n ФІНАЛЬНИЙ РАХУНОК: Ти {user_score} - {computer_score} Комп'ютер")
+    if user_score > computer_score:
+        print(" ТИ ПЕРЕМІГ! ВІТАЮ! ")
+    elif user_score < computer_score:
+        print(" Переміг комп'ютер. Спробуй ще!")
+    else:
+        print(" Нічия! Гарна гра!")
+
+
+if __name__ == "__main__":
+    rock_paper_scissors()
