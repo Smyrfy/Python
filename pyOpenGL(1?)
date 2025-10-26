@@ -1,1 +1,59 @@
+import pygame
+from pygame.locals import *
+from OpenGL.GL import *
+from OpenGL.GLU import *
+
+#куб
+vertices = (
+    (1, -1, -1), (1, 1, -1),
+    (-1, 1, -1), (-1, -1, -1),
+    (1, -1, 1), (1, 1, 1),
+    (-1, -1, 1), (-1, 1, 1)
+)
+
+edges = (
+    (0,1), (1,2), (2,3), (3,0),
+    (4,5), (5,7), (7,6), (6,4),
+    (0,4), (1,5), (2,7), (3,6)
+)
+
+#малюєм його
+def draw_cube():
+    glBegin(GL_LINES)
+    for edge in edges:
+        for vertex in edge:
+            glVertex3fv(vertices[vertex])
+    glEnd()
+
+def main():
+    pygame.init()
+    display = (800, 600)
+    pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
+    gluPerspective(45, display[0] / display[1], 0.1, 50.0)
+    glTranslatef(0, 0, -5)
+
+    rot_x = rot_y = 0
+    clock = pygame.time.Clock()
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
+                pygame.quit()
+                return
+
+        rot_x += 1
+        rot_y += 1
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+        glPushMatrix()
+        glRotatef(rot_x, 1, 0, 0)
+        glRotatef(rot_y, 0, 1, 0)
+        draw_cube()
+        glPopMatrix()
+
+        pygame.display.flip()
+        clock.tick(60)
+
+if __name__ == "__main__":
+    main()
 
