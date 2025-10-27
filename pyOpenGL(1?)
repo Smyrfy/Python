@@ -36,8 +36,9 @@ def main():
     glTranslatef(0, 0, -5)
     glEnable(GL_DEPTH_TEST)
 
-    # Кути обертання
     rot_x = rot_y = rot_z = 0
+    scale = 1.0
+    zoom_speed = 0.05
 
     clock = pygame.time.Clock()
     speed = 2
@@ -48,7 +49,7 @@ def main():
                 pygame.quit()
                 return
 
-        # Натиснуті клавіші
+        #клавіші
         keys = pygame.key.get_pressed()
         if keys[K_w]:
             rot_x -= speed
@@ -63,9 +64,18 @@ def main():
         if keys[K_e]:
             rot_z += speed
 
-        # Малювання:/
+        #це щоб можна було зменшити/збільшити фігуру
+        if keys[K_z]:
+            scale += zoom_speed
+        if keys[K_x]:
+            scale -= zoom_speed
+            if scale < 0.1:
+                scale = 0.1
+
+        # Малювання:
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glPushMatrix()
+        glScalef(scale, scale, scale)
         glRotatef(rot_x, 1, 0, 0)
         glRotatef(rot_y, 0, 1, 0)
         glRotatef(rot_z, 0, 0, 1)
