@@ -1,27 +1,93 @@
-print('Калькулятор')
-f = int(input('Виберіть функцію \nДодавання -- 1\nВіднімання -- 2\nМноження -- 3\nДілення -- 4\nПіднесення до квадрату -- 5\nОбчислення квадратного кореня -- 6\n'))
+from PyQt5.QtWidgets import (
+    QApplication, QWidget, QLabel, QLineEdit, QPushButton,
+    QVBoxLayout, QComboBox, QMessageBox
+)
+import sys
 
-if f == 1:
-    a = int(input('Введіть перше число: '))
-    b = int(input('Введіть друге число: '))
-    r = a + b
-elif f == 2:
-    a = int(input('Введіть перше число: '))
-    b = int(input('Введіть друге число: '))
-    r = a - b
-elif f == 3:
-    a = int(input('Введіть перше число: '))
-    b = int(input('Введіть друге число: '))
-    r = a * b
-elif f == 4:
-    a = int(input('Введіть перше число: '))
-    b = int(input('Введіть друге число: '))
-    r = float(a / b)
-elif f == 5:
-    c = int(input('Введіть число: '))
-    r = c * c
-elif f == 6:
-    c = int(input('Введіть число: '))
-    sqrt = c ** 0.5
-    r = sqrt
-print('Відповідь:', r)
+def calculate(f, a=None, b=None):
+    if f == 1:
+        return a + b
+    elif f == 2:
+        return a - b
+    elif f == 3:
+        return a * b
+    elif f == 4:
+        if b == 0:
+            raise ZeroDivisionError("Ділення на нуль неможливе!")
+        return a / b
+    elif f == 5:
+        return a ** 2
+    elif f == 6:
+        if a < 0:
+            raise ValueError("Корінь з від’ємного числа неможливий!")
+        return a ** 0.5
+    else:
+        raise ValueError("Невірний номер функції")
+
+#вікно
+class CalculatorWindow(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Калькулятор")
+        self.setGeometry(300, 300, 320, 250)
+
+        #інтерфейс
+        self.label_function = QLabel("Виберіть функцію:")
+        self.combo = QComboBox()
+        self.combo.addItems([
+            "Додавання",
+            "Віднімання",
+            "Множення",
+            "Ділення",
+            "Піднесення до квадрату",
+            "Квадратний корінь"
+        ])
+
+        self.label_a = QLabel("Перше число:")
+        self.input_a = QLineEdit()
+
+        self.label_b = QLabel("Друге число (якщо потрібно):")
+        self.input_b = QLineEdit()
+
+        self.button = QPushButton("Обчислити")
+        self.button.clicked.connect(self.run_calc)
+
+        self.result_label = QLabel("Відповідь: ")
+
+        layout = QVBoxLayout()
+        layout.addWidget(self.label_function)
+        layout.addWidget(self.combo)
+        layout.addWidget(self.label_a)
+        layout.addWidget(self.input_a)
+        layout.addWidget(self.label_b)
+        layout.addWidget(self.input_b)
+        layout.addWidget(self.button)
+        layout.addWidget(self.result_label)
+        self.setLayout(layout)
+
+    def run_calc(self):
+        try:
+            f = self.combo.currentIndex() + 1
+            a_text = self.input_a.text()
+            b_text = self.input_b.text()
+
+            a = float(a_text) if a_text else None
+            b = float(b_text) if b_text else None
+
+            if f in (1, 2, 3, 4) and (a is None or b is None):
+                raise ValueError("Введіть обидва числа!")
+            if f in (5, 6) and a is None:
+                raise ValueError("Введіть число!")
+
+            r = calculate(f, a, b)
+            self.result_label.setText(f"Відповідь: {r}")
+
+        except Exception as e:
+            QMessageBox.warning(self, "Помилка", str(e))
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = CalculatorWindow()
+    window.show()
+    sys.exit(app.exec_())
