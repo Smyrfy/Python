@@ -1,0 +1,32 @@
+import turtle
+
+turtle.title("Rainbow Spiral!")
+turtle.speed(0)
+turtle.bgcolor("black")
+turtle.colormode(255)
+
+r, g, b = 255, 0, 0
+
+for i in range(255 * 2):
+    if i < 255 // 3:
+        g += 3
+    elif i < 255 * 2 // 3:
+        r -= 3
+    elif i < 255:
+        b += 3
+    elif i < 255 * 4 // 3:
+        g -= 3
+    elif i < 255 * 5 // 3:
+        r += 3
+    else:
+        b -= 3
+
+    r = max(0, min(255, r))
+    g = max(0, min(255, g))
+    b = max(0, min(255, b))
+    
+    turtle.pencolor(r, g, b)
+    turtle.forward(i * 0.5)
+    turtle.right(91)
+
+turtle.done()
